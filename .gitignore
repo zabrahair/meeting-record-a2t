@@ -2,3 +2,4 @@ main/dist-uat/
 main/dist/
 *.zip
 .DS_Store
+package-lock.json
