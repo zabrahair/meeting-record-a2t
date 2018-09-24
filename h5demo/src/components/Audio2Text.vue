@@ -1,5 +1,8 @@
 <template>
-    $END$
+  <div>
+    I am audio to text.
+  </div>
+
 </template>
 
 <script>

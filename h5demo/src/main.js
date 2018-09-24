@@ -3,8 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import {AudioRecorder, AudioPlayer} from 'vue-audio-recorder'
+
 
 Vue.config.productionTip = false
+Vue.component(AudioPlayer)
+Vue.component(AudioRecorder)
+
 
 /* eslint-disable no-new */
 new Vue({

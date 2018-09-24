@@ -1,11 +1,10 @@
 package meeting.record.restapi.wx.decrypt;
 
+import sun.misc.BASE64Decoder;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import sun.misc.BASE64Decoder;
-import com.alibaba.fastjson.JSONObject;
 
 /**
  * Created by deanwang on 2019/09/24.
@@ -15,7 +14,7 @@ import com.alibaba.fastjson.JSONObject;
  * AES-128-CBC可以自己定义“密钥”和“偏移量“。
  * AES-128是jdk自动生成的“密钥”。
  */
-public class AesCbcUtil {
+public class WXBizDataCrypt {
 
 
     /*
@@ -46,6 +45,7 @@ public class AesCbcUtil {
     public String decrypt(String encryptedData, String sessionKey, String iv, String encodingFormat) throws Exception {
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+//            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
             BASE64Decoder base64Decoder = new BASE64Decoder();
             byte[] _encryptedData = base64Decoder.decodeBuffer(encryptedData);
             byte[] _sessionKey = base64Decoder.decodeBuffer(sessionKey);
@@ -55,11 +55,11 @@ public class AesCbcUtil {
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
             byte[] original = cipher.doFinal(_encryptedData);
             byte[] bytes = PKCS7Encoder.decode(original);
-            String originalString = new String(bytes, "UTF-8");
+            String originalString = new String(bytes, encodingFormat);
             return originalString;
         } catch (Exception ex) {
+            ex.printStackTrace();
             return null;
         }
     }
-
 }
