@@ -26,10 +26,10 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import sun.misc.BASE64Decoder;
 
 @RestController
-public class MeetingRecorderController {
+public class WeChatUserInfoController {
 
 //    @RequestMapping(value="/", method = RequestMethod.GET)
-    @PostMapping(value="/")
+    @PostMapping(value="/wechat/getUserInfo")
     public @ResponseBody
     String index(@RequestParam("wxcode") String wxcode, @RequestParam("wxiv")String wxiv, @RequestParam("wxdata") String wxdata) {
         System.out.println("wxcode: " +  wxcode);
