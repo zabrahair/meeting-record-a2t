@@ -42,7 +42,7 @@
         msg: 'Welcome to Your Vue.js App',
         audioTxtContent: '',
         isTextUnchangeable: true,
-        uploadUrl: 'http://localhost:8080/api/file/upload',
+        uploadUrl: '/api/file/upload',
         audioConvertData: {},
         isLoading: false,
         loadingMsg: "语音转换处理中",
