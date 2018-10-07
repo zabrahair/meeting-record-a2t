@@ -1,0 +1,6 @@
+docker run -a stdin -a stdout -i -t vuejs-cookbook/dockerize-vuejs-app:latest  /bin/bash
+docker build -t vuejs-cookbook/dockerize-vuejs-app .
+
+docker run -it -p 8080:8080 --rm --name devtest --mount type=bind,source="$(pwd)"/dist,target=/app/dist --name dockerize-vuejs-app-1 vuejs-cookbook/dockerize-vuejs-app /bin/bash
+
+http-server -p 8080 dist
