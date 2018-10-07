@@ -4,6 +4,9 @@ buildscript {
     }
     repositories {
         mavenCentral()
+        flatDir {
+            dirs 'libs'
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -35,5 +38,5 @@ dependencies {
     compile('com.alibaba:fastjson:1.2.49')
     compile('org.bouncycastle:bcprov-jdk15on:1.60')
 //    compile('org.springframework.boot:spring-boot-starter-web')
-
+    compile files('libs/lfasr-sdk-client-2.0.0.1005-jar-with-dependencies.jar')
 }

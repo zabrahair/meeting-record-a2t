@@ -1,6 +1,8 @@
 <template>
   <div class="app-container">
     <el-input
+      v-loading="isLoading"
+      :element-loading-text="loadingMsg"
       class="audio-text-content"
       type="textarea"
       :rows="10"
@@ -10,10 +12,12 @@
     </el-input>
 
     <audio-recorder
+      v-loading="isLoading"
+      :element-loading-text="loadingMsg"
       class='meeting-recorder'
       :upload-url="uploadUrl"
       :attempts="3"
-      :time="2"
+      :time="60"
       :start-record="onStartRecord"
       :stop-record="onStopRecord"
       :start-upload="onStartUpload"
@@ -25,6 +29,7 @@
 
 <script>
   import { logObj } from '@/utils/logger'
+  import { isNotEmptyArray } from '@/utils/index'
 
   // import AudioRecorder from 'vue-audio-recorder'
   // import Vue from 'vue'
@@ -38,6 +43,9 @@
         audioTxtContent: '',
         isTextUnchangeable: true,
         uploadUrl: 'http://localhost:8080/api/file/upload',
+        audioConvertData: {},
+        isLoading: false,
+        loadingMsg: "语音转换处理中",
       }
     },
     methods: {
@@ -49,36 +57,48 @@
       },
       onStartUpload: function(e){
         logObj(e, 'onStartUpload')
+        this.isLoading = true;
       },
       onUploadSuccess: function(e){
-        logObj(e, 'onUploadSuccess')
+        this.audioConvertData = e.data
+        logObj(this.audioConvertData, "result data")
+        logObj(isNotEmptyArray(this.audioConvertData), "is Array")
+        if (isNotEmptyArray(this.audioConvertData)){
+          for(var i = 0; i < this.audioConvertData.length; i++){
+            logObj(this.audioConvertData[i].onebest, "oneBest")
+            this.audioTxtContent += `${i==0?'':'。'} ${this.audioConvertData[i].onebest}`;
+          }
+        }
+        this.isLoading = false;
+        // logObj(e, 'onUploadSuccess')
       },
       onUploadFailed: function(e){
         logObj(e, 'onUploadFailed')
+        this.isLoading = false;
       },
     }
   }
 </script>
 
 <style scoped>
-  div {
-    border: 1px solid black;
-  }
+  /*div {*/
+    /*border: 1px solid black;*/
+  /*}*/
 
   .app-container {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
 
-    width: 70em;
+    width: 100%;
     height: 100%;
 
-    border-color:red;
+    /*border-color:red;*/
   }
 
   .audio-text-content {
-    border-color: green;
+    /*border-color: green;*/
   }
 
   .meeting-recorder{

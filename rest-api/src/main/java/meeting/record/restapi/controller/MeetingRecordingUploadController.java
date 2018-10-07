@@ -1,8 +1,10 @@
 package meeting.record.restapi.controller;
 
 
+import com.iflytek.msp.cpdb.lfasr.util.StringUtil;
 import meeting.record.restapi.configuration.FileUploadConfiguration;
 import meeting.record.restapi.utils.ConstantUtil;
+import meeting.record.restapi.utils.Voice2TextProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +31,7 @@ public class MeetingRecordingUploadController {
     @PostMapping(value="/file/upload")
     public @ResponseBody String upload(@RequestParam("audio") MultipartFile file){
         if (!file.isEmpty()) {
+            String audioText = "";
             try {
                 String location = uploadPath + ConstantUtil.AUDIO_UPLOAD_PATH;
                 logger.info("uploadPath: {}",location);
@@ -46,6 +49,9 @@ public class MeetingRecordingUploadController {
                 out.write(file.getBytes());
                 out.flush();
                 out.close();
+
+                audioText = Voice2TextProcess.wav2Text(filePath);
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 return "上传失败," + e.getMessage();
@@ -53,7 +59,7 @@ public class MeetingRecordingUploadController {
                 e.printStackTrace();
                 return "上传失败," + e.getMessage();
             }
-            return "上传成功";
+            return StringUtil.isEmpty(audioText)? "上传成功": audioText;
         } else {
             return "上传失败，因为文件是空的.";
         }
